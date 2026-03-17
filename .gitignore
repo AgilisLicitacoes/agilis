@@ -1,0 +1,41 @@
+# dependências
+node_modules/
+
+# builds
+dist/
+build/
+out/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+*.log
+
+# editor / sistema
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ambiente
+.env
+.env.*
+!.env.example
+
+# caches
+.parcel-cache/
+.turbo/
+.next/
+.nuxt/
+coverage/
+.eslintcache
+.cache/
+
+# artefatos diversos
+*.local
+
