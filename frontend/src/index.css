@@ -18,8 +18,8 @@
   --card: 0 0% 100%;
   --card-foreground: 222 47% 11%;
 
-  /* Agilis brand */
-  --primary: 270 70% 54%;
+  /* Agilis brand — #9333EA */
+  --primary: 271 81% 56%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 210 40% 96%;
@@ -31,7 +31,7 @@
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --ring: 270 70% 54%;
+  --ring: 271 81% 56%;
 
   --radius: 0.75rem;
 }
