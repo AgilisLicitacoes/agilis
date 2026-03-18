@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import agilisLogo from "@/assets/agilisnewlogo.png";
 
 function Auth() {
   const [mode, setMode] = useState("login"); // "login" | "signup"
@@ -10,8 +11,12 @@ function Auth() {
     <div className="flex min-h-screen w-full items-center justify-center bg-background px-6 py-10 text-foreground">
       <div className="flex w-full max-w-md flex-col items-center">
         <header className="mb-8 flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <span className="text-sm font-bold">A</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
+            <img
+              src={agilisLogo}
+              alt="Agilis Licitações"
+              className="h-6 w-6 object-contain"
+            />
           </div>
           <span className="text-2xl font-bold tracking-tight">
             Agilis Licitações
