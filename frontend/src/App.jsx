@@ -2,9 +2,10 @@ import { useState } from "react";
 import Auth from "./pages/Auth";
 import Paywall from "./pages/Paywall";
 import Dashboard from "./pages/Dashboard";
+import NewLicitacao from "./pages/NewLicitacao";
 
 function App() {
-  const [screen, setScreen] = useState("dashboard"); // "auth" | "paywall" | "dashboard"
+  const [screen, setScreen] = useState("dashboard"); // "auth" | "paywall" | "dashboard" | "newLicitacao"
 
   return (
     <div className="min-h-screen">
@@ -22,7 +23,15 @@ function App() {
         </button>
       </div>
 
-      {screen === "auth" ? <Auth /> : screen === "dashboard" ? <Dashboard /> : <Paywall />}
+      {screen === "auth" ? (
+        <Auth />
+      ) : screen === "dashboard" ? (
+        <Dashboard onNewLicitacao={() => setScreen("newLicitacao")} />
+      ) : screen === "newLicitacao" ? (
+        <NewLicitacao onBack={() => setScreen("dashboard")} />
+      ) : (
+        <Paywall />
+      )}
     </div>
   );
 }
