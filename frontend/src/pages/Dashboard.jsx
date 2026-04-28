@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/Sidebar";
 import { cn } from "@/lib/utils";
+import { licitacoesMock } from "@/mocks/licitacoes";
 
 function EyeIcon({ className }) {
   return (
@@ -41,48 +42,22 @@ function TrashIcon({ className }) {
   );
 }
 
-const licitacoesMock = [
-  {
-    id: "900062025",
-    title: "Pregão Eletrônico N° 90006/2025 (SRP)",
-    org: "Hospital Geral de Juiz de Fora",
-    uasg: "160121",
-    date: "12 Out 2023",
-    status: { label: "Extração Concluída", tone: "success" },
-  },
-  {
-    id: "901042025",
-    title: "Pregão Eletrônico N° 90104/2025 (SRP)",
-    org: "Prefeitura Municipal de Duque de Caxias - RJ",
-    uasg: "985833",
-    date: "10 Out 2023",
-    status: { label: "Processando Edital", tone: "warning" },
-  },
-  {
-    id: "908222025",
-    title: "Pregão Eletrônico N° 90822/2025 (SRP)",
-    org: "Hospital das Clínicas de São Paulo",
-    uasg: "92301",
-    date: "08 Out 2023",
-    status: { label: "Extração Concluída", tone: "success" },
-  },
-  {
-    id: "3342025",
-    title: "Aviso de Contratação Direta nº 334/2025",
-    org: "Fundo Estadual de Saúde de Rondônia",
-    uasg: "927502",
-    date: "05 Out 2023",
-    status: { label: "Aguardando Início", tone: "neutral" },
-  },
-  {
-    id: "900182025",
-    title: "Pregão Eletrônico N° 90018/2025 (SRP)",
-    org: "Hospital Geral de Salvador",
-    uasg: "160039",
-    date: "03 Out 2023",
-    status: { label: "Extração Concluída", tone: "success" },
-  },
-];
+function ClickableRowArea({ onClick, children, className, title }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "w-full text-left rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background",
+        "hover:bg-accent/50 transition-colors",
+        className,
+      )}
+      title={title}
+    >
+      {children}
+    </button>
+  );
+}
 
 function StatusPill({ tone = "neutral", children }) {
   const tones = {
@@ -105,7 +80,7 @@ function StatusPill({ tone = "neutral", children }) {
   );
 }
 
-function LicitacoesTable() {
+function LicitacoesTable({ onOpenEdital }) {
   return (
     <div className="rounded-lg border border-border bg-card shadow-sm">
       <div className="grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted-foreground">
@@ -122,20 +97,26 @@ function LicitacoesTable() {
             className="grid grid-cols-12 items-center gap-3 px-5 py-4"
           >
             <div className="col-span-6 min-w-0">
-              <div className="truncate text-sm font-semibold text-foreground">
-                {row.title}
-              </div>
-              <div className="flex min-w-0 items-center gap-2">
-                <span className="flex-shrink-0 rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                  UASG: {row.uasg}
-                </span>
-                <div className="min-w-0 truncate text-xs text-muted-foreground">
-                  {row.org}
+              <ClickableRowArea
+                onClick={() => onOpenEdital?.(row.id)}
+                title="Abrir tela geral do edital"
+                className="px-2 py-1 -mx-2"
+              >
+                <div className="truncate text-sm font-semibold text-foreground">
+                  {row.title}
                 </div>
-              </div>
+                <div className="flex min-w-0 items-center gap-2">
+                  <span className="flex-shrink-0 rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                    UASG: {row.uasg}
+                  </span>
+                  <div className="min-w-0 truncate text-xs text-muted-foreground">
+                    {row.emissor}
+                  </div>
+                </div>
+              </ClickableRowArea>
             </div>
 
-            <div className="col-span-2 text-sm text-foreground">{row.date}</div>
+            <div className="col-span-2 text-sm text-foreground">{row.publishedAt}</div>
 
             <div className="col-span-3">
               <StatusPill tone={row.status.tone}>{row.status.label}</StatusPill>
@@ -149,6 +130,7 @@ function LicitacoesTable() {
                 className="h-9 w-9 rounded-md text-muted-foreground hover:text-foreground"
                 aria-label="Ver"
                 title="Ver"
+                onClick={() => onOpenEdital?.(row.id)}
               >
                 <EyeIcon className="h-4 w-4" />
               </Button>
@@ -170,7 +152,7 @@ function LicitacoesTable() {
   );
 }
 
-function Dashboard({ onNewLicitacao }) {
+function Dashboard({ onNewLicitacao, onOpenEdital }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="flex min-h-screen">
@@ -196,7 +178,7 @@ function Dashboard({ onNewLicitacao }) {
 
           <main className="flex-1 px-6 py-6">
             <div className="mx-auto w-full max-w-6xl">
-              <LicitacoesTable />
+              <LicitacoesTable onOpenEdital={onOpenEdital} />
             </div>
           </main>
         </div>
