@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  user
+  admin
+}
+
+model User {
+  uid         String   @id @db.Text
+  email       String   @unique @db.Text
+  fullName    String   @db.Text
+  approved    Boolean  @default(false)
+  role        UserRole @default(user)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  approvedAt  DateTime?
+  approvedBy  String?  @db.Text
+  lastLoginAt DateTime?
+
+  @@index([approved])
+  @@index([role])
+}
+
