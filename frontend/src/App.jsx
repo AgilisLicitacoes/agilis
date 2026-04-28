@@ -3,9 +3,11 @@ import Auth from "./pages/Auth";
 import Paywall from "./pages/Paywall";
 import Dashboard from "./pages/Dashboard";
 import NewLicitacao from "./pages/NewLicitacao";
+import EditalGeral from "./pages/EditalGeral";
 
 function App() {
   const [screen, setScreen] = useState("dashboard"); // "auth" | "paywall" | "dashboard" | "newLicitacao"
+  const [selectedLicitacaoId, setSelectedLicitacaoId] = useState(null);
 
   return (
     <div className="min-h-screen">
@@ -26,7 +28,21 @@ function App() {
       {screen === "auth" ? (
         <Auth />
       ) : screen === "dashboard" ? (
-        <Dashboard onNewLicitacao={() => setScreen("newLicitacao")} />
+        <Dashboard
+          onNewLicitacao={() => setScreen("newLicitacao")}
+          onOpenEdital={(id) => {
+            setSelectedLicitacaoId(id);
+            setScreen("editalGeral");
+          }}
+        />
+      ) : screen === "editalGeral" ? (
+        <EditalGeral
+          licitacaoId={selectedLicitacaoId}
+          onBack={() => {
+            setSelectedLicitacaoId(null);
+            setScreen("dashboard");
+          }}
+        />
       ) : screen === "newLicitacao" ? (
         <NewLicitacao onBack={() => setScreen("dashboard")} />
       ) : (
