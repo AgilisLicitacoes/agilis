@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import agilisLogo from "@/assets/agilisnewlogo.png";
+import { useSession } from "@/session/SessionProvider";
 
 function Paywall() {
+  const { logout } = useSession();
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-background px-6 py-10 text-foreground">
       <div className="flex w-full max-w-xl flex-col items-center">
@@ -59,6 +61,7 @@ function Paywall() {
               type="button"
               variant="outline"
               className="h-11 w-full bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              onClick={() => void logout()}
             >
               Voltar para o login
             </Button>

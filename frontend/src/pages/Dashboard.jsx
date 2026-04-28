@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/Sidebar";
 import { cn } from "@/lib/utils";
 import { licitacoesMock } from "@/mocks/licitacoes";
+import { useSession } from "@/session/SessionProvider";
 
 function EyeIcon({ className }) {
   return (
@@ -152,7 +153,8 @@ function LicitacoesTable({ onOpenEdital }) {
   );
 }
 
-function Dashboard({ onNewLicitacao, onOpenEdital }) {
+function Dashboard({ onNewLicitacao, onOpenEdital, onOpenAdminUsers }) {
+  const { profile, isAdmin, logout } = useSession();
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="flex min-h-screen">
@@ -168,11 +170,29 @@ function Dashboard({ onNewLicitacao, onOpenEdital }) {
                 <p className="mt-1 text-sm text-muted-foreground">
                   Acompanhe e extraia dados de editais automaticamente com IA.
                 </p>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Logado como <span className="font-medium text-foreground">{profile?.email ?? "-"}</span>
+                </p>
               </div>
 
-              <Button type="button" className="h-11" onClick={onNewLicitacao}>
-                + Nova Licitação
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                {isAdmin && onOpenAdminUsers ? (
+                  <Button type="button" variant="outline" className="h-11" onClick={onOpenAdminUsers}>
+                    Aprovar usuários
+                  </Button>
+                ) : null}
+                <Button type="button" className="h-11" onClick={onNewLicitacao}>
+                  + Nova Licitação
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-11 bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                  onClick={() => void logout()}
+                >
+                  Sair
+                </Button>
+              </div>
             </div>
           </header>
 

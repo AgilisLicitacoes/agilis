@@ -4,36 +4,35 @@ import Paywall from "./pages/Paywall";
 import Dashboard from "./pages/Dashboard";
 import NewLicitacao from "./pages/NewLicitacao";
 import EditalGeral from "./pages/EditalGeral";
+import AdminUsers from "./pages/AdminUsers";
+import { useSession } from "./session/SessionProvider";
 
 function App() {
-  const [screen, setScreen] = useState("dashboard"); // "auth" | "paywall" | "dashboard" | "newLicitacao"
+  const { loading, isLoggedIn, isApproved, isAdmin } = useSession();
+  const [screen, setScreen] = useState("dashboard"); // "dashboard" | "newLicitacao" | "editalGeral" | "adminUsers"
   const [selectedLicitacaoId, setSelectedLicitacaoId] = useState(null);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
+        <div className="text-sm text-muted-foreground">Carregando sessão...</div>
+      </div>
+    );
+  }
+
+  if (!isLoggedIn) return <Auth />;
+  if (!isApproved) return <Paywall />;
 
   return (
     <div className="min-h-screen">
-      <div className="fixed left-4 top-4 z-50">
-        <button
-          type="button"
-          onClick={() =>
-            setScreen((s) =>
-              s === "auth" ? "dashboard" : s === "dashboard" ? "paywall" : "auth",
-            )
-          }
-          className="rounded-md border border-border bg-card px-3 py-2 text-xs font-medium text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground"
-        >
-          Testar outra página
-        </button>
-      </div>
-
-      {screen === "auth" ? (
-        <Auth />
-      ) : screen === "dashboard" ? (
+      {screen === "dashboard" ? (
         <Dashboard
           onNewLicitacao={() => setScreen("newLicitacao")}
           onOpenEdital={(id) => {
             setSelectedLicitacaoId(id);
             setScreen("editalGeral");
           }}
+          onOpenAdminUsers={isAdmin ? () => setScreen("adminUsers") : undefined}
         />
       ) : screen === "editalGeral" ? (
         <EditalGeral
@@ -45,8 +44,17 @@ function App() {
         />
       ) : screen === "newLicitacao" ? (
         <NewLicitacao onBack={() => setScreen("dashboard")} />
+      ) : screen === "adminUsers" ? (
+        <AdminUsers onBack={() => setScreen("dashboard")} />
       ) : (
-        <Paywall />
+        <Dashboard
+          onNewLicitacao={() => setScreen("newLicitacao")}
+          onOpenEdital={(id) => {
+            setSelectedLicitacaoId(id);
+            setScreen("editalGeral");
+          }}
+          onOpenAdminUsers={isAdmin ? () => setScreen("adminUsers") : undefined}
+        />
       )}
     </div>
   );
